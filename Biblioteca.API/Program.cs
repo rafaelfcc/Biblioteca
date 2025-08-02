@@ -10,6 +10,7 @@ builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(conne
 
 // Injeção de dependência
 builder.Services.AddScoped<LivroRepository>();
+builder.Services.AddScoped<UsuarioRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

@@ -9,5 +9,7 @@ namespace Biblioteca.Domain.Contracts
 {
     public interface IUsuarioRepository : _IBaseRepository<Usuario>
     {
+        string Insert(Usuario usuario);
+        bool Delete(string id);
     }
 }

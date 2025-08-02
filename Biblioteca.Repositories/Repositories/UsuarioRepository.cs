@@ -12,6 +12,17 @@ namespace Biblioteca.Data.Repositories
     {
         public UsuarioRepository(DataContext context) : base(context)
         {
+
+        }
+
+        public string? Insert(Usuario usuario)
+        {
+            return base.Insert<string>(usuario);
+        }
+
+        public bool Delete(string id)
+        {
+            return base.Delete<string>(id);
         }
     }
 }
