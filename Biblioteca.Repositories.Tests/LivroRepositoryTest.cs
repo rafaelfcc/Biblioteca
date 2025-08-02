@@ -1,6 +1,6 @@
 ﻿using Biblioteca.Data.Context;
 using Biblioteca.Domain.Entities;
-using Livraria.Data.Repositories;
+using Bibliotecaq.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
