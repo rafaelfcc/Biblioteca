@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Livraria.Data.Repositories
+namespace Biblioteca.Data.Repositories
 {
     public abstract class _BaseRepository<T> : _IBaseRepository<T> where T : class
     {
