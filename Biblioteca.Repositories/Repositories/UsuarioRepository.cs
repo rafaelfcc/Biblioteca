@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Livraria.Data.Repositories
+namespace Biblioteca.Data.Repositories
 {
     public class UsuarioRepository : _BaseRepository<Usuario>
     {
