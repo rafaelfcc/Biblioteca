@@ -14,5 +14,15 @@ namespace Biblioteca.Data.Repositories
         {
 
         }
+
+        public Guid? Insert(Livro livro)
+        {
+            return base.Insert<Guid>(livro);
+        }
+
+        public bool Delete(Guid id)
+        {
+            return base.Delete<Guid>(id);
+        }
     }
 }

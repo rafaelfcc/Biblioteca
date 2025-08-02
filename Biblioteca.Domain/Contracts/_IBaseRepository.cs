@@ -11,8 +11,8 @@ namespace Biblioteca.Domain.Contracts
     {
         T? Get(Guid id);
         List<T> GetList(Expression<Func<T, bool>> filter);
-        Guid Insert(T item);
+        Tid Insert<Tid>(T item);
         bool Update(T item);
-        bool Delete(Guid id);
+        bool Delete<Tid>(Tid id);
     }
 }

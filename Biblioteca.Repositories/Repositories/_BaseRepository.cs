@@ -31,11 +31,20 @@ namespace Biblioteca.Data.Repositories
             return _dbSet.Where(filter).ToList();
         }
 
-        public virtual Guid Insert(T item)
+        public virtual Tid? Insert<Tid>(T item)
         {
             _dbSet.Add(item);
             _context.SaveChanges();
-            return Guid.Empty;
+
+            var idProp = typeof(T).GetProperty("Id");
+            if (idProp != null && idProp.PropertyType == typeof(Guid))
+            {
+                var value = idProp.GetValue(item);
+                if (value != null)
+                    return (Tid)value;
+            }
+
+            return default(Tid);
         }
 
         public virtual bool Update(T item)
@@ -44,13 +53,11 @@ namespace Biblioteca.Data.Repositories
             return _context.SaveChanges() > 0;
         }
 
-        public virtual bool Delete(Guid id)
+        public virtual bool Delete<Tid>(Tid id)
         {
             var item = _dbSet.Find(id);
             if (item == null)
-            {
                 return false;
-            }
 
             _dbSet.Remove(item);
             return _context.SaveChanges() > 0;

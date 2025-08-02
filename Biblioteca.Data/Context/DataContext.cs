@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Biblioteca.Data.Context
 {
@@ -32,7 +31,7 @@ namespace Biblioteca.Data.Context
         {
             modelBuilder.Entity<Usuario>(entity =>
             {
-                entity.ToTable("ContasAcesso");
+                entity.ToTable("Usuario");
 
                 entity.HasKey(e => e.EmailLogin);
 
