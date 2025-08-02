@@ -1,4 +1,5 @@
-﻿using Biblioteca.Domain.Entities;
+﻿using Biblioteca.Data.Repositories;
+using Biblioteca.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,30 +9,62 @@ namespace Biblioteca.API.Controllers
     [ApiController]
     public class LivrosController : ControllerBase
     {
-        [HttpGet("{id}")]
-        public ActionResult<Livro> Get(int id)
+        private readonly LivroRepository _repository;
+
+        public LivrosController(LivroRepository repository)
         {
-            var livro = new Livro("Procurando novo Emprego em TI", "ISBN12345", "Aventura", "Rafael Caixeiro", "Editora Tô Ficando Maluco", "A história de um profissional demitido procurando novo emprego da área de desenvolvimento de Software", "");
+            _repository = repository;
+        }
+
+        [HttpGet("{id:guid}")]
+        public ActionResult<Livro> Get(Guid id)
+        {
+            var livro = _repository.Get(id);
+            if (livro == null)
+                return NotFound();
 
             return Ok(livro);
         }
 
+        [HttpGet]
+        public ActionResult<List<Livro>> GetAll()
+        {
+            var livros = _repository.GetList(l => true);
+            return Ok(livros);
+        }
+
         [HttpPost]
-        public ActionResult<Livro> Post([FromBody] Livro novoLivro)
+        public ActionResult<Guid> Post([FromBody] Livro novoLivro)
         {
-            return Ok();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var id = _repository.Insert(novoLivro);
+            return CreatedAtAction(nameof(Get), new { id = id }, novoLivro);
         }
 
-        [HttpPut]
-        public IActionResult Put([FromBody] Livro livroAtualizado)
+        [HttpPut("{id:guid}")]
+        public IActionResult Put(Guid id, [FromBody] Livro livroAtualizado)
         {
-            return Ok("Dado Atualizado");
+            if (id != livroAtualizado.Id)
+                return BadRequest("ID inconsistente");
+
+            var livroExistente = _repository.Get(id);
+            if (livroExistente == null)
+                return NotFound();
+
+            _repository.Update(livroAtualizado);
+            return Ok("Livro atualizado com sucesso");
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("{id:guid}")]
+        public IActionResult Delete(Guid id)
         {
-            return Ok("Dado Excluído");
+            var sucesso = _repository.Delete(id);
+            if (!sucesso)
+                return NotFound();
+
+            return Ok("Livro excluído com sucesso");
         }
     }
 }

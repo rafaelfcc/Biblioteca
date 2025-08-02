@@ -35,6 +35,15 @@ namespace Biblioteca.Data.Repositories
         {
             _dbSet.Add(item);
             _context.SaveChanges();
+
+            var idProp = typeof(T).GetProperty("Id");
+            if (idProp != null && idProp.PropertyType == typeof(Guid))
+            {
+                var value = idProp.GetValue(item);
+                if (value != null)
+                    return (Guid)value;
+            }
+
             return Guid.Empty;
         }
 
