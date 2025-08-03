@@ -9,7 +9,7 @@ namespace Biblioteca.Domain.Contracts
 {
     public interface _IBaseRepository<T>
     {
-        T? Get(Guid id);
+        T? Get<Tid>(Tid id);
         List<T> GetList(Expression<Func<T, bool>> filter);
         Tid Insert<Tid>(T item);
         bool Update(T item);

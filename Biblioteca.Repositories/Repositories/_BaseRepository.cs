@@ -21,7 +21,7 @@ namespace Biblioteca.Data.Repositories
             _dbSet = _context.Set<T>();
         }
 
-        public virtual T? Get(Guid id)
+        public virtual T? Get<Tid>(Tid id)
         {
             return _dbSet.Find(id);
         }

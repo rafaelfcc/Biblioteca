@@ -15,6 +15,11 @@ namespace Biblioteca.Data.Repositories
 
         }
 
+        public Usuario? Get(string id)
+        {
+            return base.Get<string>(id);
+        }
+
         public string? Insert(Usuario usuario)
         {
             return base.Insert<string>(usuario);
