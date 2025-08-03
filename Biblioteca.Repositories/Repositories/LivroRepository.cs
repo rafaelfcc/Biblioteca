@@ -1,5 +1,6 @@
 ﻿using Biblioteca.Data.Context;
 using Biblioteca.Domain.Entities;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,11 @@ namespace Biblioteca.Data.Repositories
         public LivroRepository(DataContext context) : base(context)
         {
 
+        }
+
+        public Livro? Get(Guid id)
+        {
+            return base.Get<Guid>(id);
         }
 
         public Guid? Insert(Livro livro)
