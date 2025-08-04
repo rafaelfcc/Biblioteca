@@ -109,4 +109,5 @@ app.UseAuthorization();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.MapControllers();
+//app.UseStaticFiles();
 app.Run();

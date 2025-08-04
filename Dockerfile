@@ -24,6 +24,9 @@ WORKDIR /app
 # Copiar os arquivos publicados da etapa build
 COPY --from=build /app/publish .
 
+# criar diretório para os arquivos de imagens
+RUN mkdir -p wwwroot/uploads
+
 # Expor porta 80
 EXPOSE 80
 

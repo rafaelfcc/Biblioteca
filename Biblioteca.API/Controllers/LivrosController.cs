@@ -3,6 +3,7 @@ using Biblioteca.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Biblioteca.API.Controllers
 {
@@ -73,6 +74,20 @@ namespace Biblioteca.API.Controllers
                 return NotFound();
 
             return Ok("Livro excluído com sucesso");
+        }
+
+        [HttpPost]
+        public IActionResult AtualizarImagemLivro([FromBody] ImagemLivro imagemLivro)
+        {
+            var existente = _repository.GetList(l => l.Id == imagemLivro.LivroId).FirstOrDefault();
+
+            if (existente == null)
+                return NotFound();
+
+            existente.CaminhoFoto = imagemLivro.ImagemPath;
+
+            _repository.Update(existente);
+            return Ok("Livro atualizado com sucesso");
         }
     }
 }
