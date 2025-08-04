@@ -45,17 +45,23 @@ namespace Biblioteca.API.Controllers
             return CreatedAtAction(nameof(Get), new { id = id }, novoLivro);
         }
 
-        [HttpPut("{id:guid}")]
-        public IActionResult Put(Guid id, [FromBody] Livro livroAtualizado)
+        [HttpPut]
+        public IActionResult Put([FromBody] Livro livroAtualizado)
         {
-            if (id != livroAtualizado.Id)
-                return BadRequest("ID inconsistente");
+            var existente = _repository.GetList(l => l.Id == livroAtualizado.Id).FirstOrDefault();
 
-            var livroExistente = _repository.Get(id);
-            if (livroExistente == null)
+            if (existente == null)
                 return NotFound();
 
-            _repository.Update(livroAtualizado);
+            existente.Id = livroAtualizado.Id;
+            existente.Titulo = livroAtualizado.Titulo;
+            existente.ISBN = livroAtualizado.ISBN;
+            existente.Autor = livroAtualizado.Autor;
+            existente.Editora = livroAtualizado.Editora;
+            existente.Sinopse = livroAtualizado.Sinopse;
+            existente.CaminhoFoto = livroAtualizado.CaminhoFoto;
+
+            _repository.Update(existente);
             return Ok("Livro atualizado com sucesso");
         }
 

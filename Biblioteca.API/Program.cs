@@ -21,6 +21,19 @@ builder.Services.AddScoped<JwtService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
@@ -84,7 +97,13 @@ builder.Services.AddSwaggerGen(c =>
 });
 /////
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(80);
+});
+
 var app = builder.Build();
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSwagger();

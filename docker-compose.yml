@@ -11,5 +11,19 @@ services:
       - sql_data:/var/opt/mssql
     restart: unless-stopped
 
+  biblioteca-backend:
+    image: biblioteca-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5078:80"  # Mapeia a porta 80 do container para a 5078 local
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
 volumes:
   sql_data:
+  
+networks:
+  app-network:
+    driver: bridge

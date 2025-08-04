@@ -3,6 +3,7 @@ using Biblioteca.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Biblioteca.API.Controllers
 {
@@ -50,17 +51,18 @@ namespace Biblioteca.API.Controllers
             return CreatedAtAction(nameof(Get), new { email = novoUsuario.EmailLogin }, novoUsuario);
         }
 
-        [HttpPut("{email}")]
-        public IActionResult Put(string email, [FromBody] Usuario usuarioAtualizado)
+        [HttpPut]
+        public IActionResult Put([FromBody] Usuario usuarioAtualizado)
         {
-            if (email != usuarioAtualizado.EmailLogin)
-                return BadRequest("E-mail inconsistente");
-
-            var existente = _repository.GetList(u => u.EmailLogin == email).FirstOrDefault();
+            var existente = _repository.GetList(u => u.EmailLogin == usuarioAtualizado.EmailLogin).FirstOrDefault();
             if (existente == null)
                 return NotFound();
 
-            _repository.Update(usuarioAtualizado);
+            existente.Nome = usuarioAtualizado.Nome;
+            existente.DataNascimento = usuarioAtualizado.DataNascimento;
+            existente.Senha = usuarioAtualizado.Senha;
+
+            _repository.Update(existente);
             return Ok("Usuário atualizado com sucesso");
         }
 

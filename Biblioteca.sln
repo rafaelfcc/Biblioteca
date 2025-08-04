@@ -11,20 +11,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Business", "3 - Busines
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Presentation", "4 - Presentation", "{89E76D0C-0B27-473A-B973-FB46C847D657}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biblioteca.Domain", "Biblioteca.Domain\Biblioteca.Domain.csproj", "{7B655539-32DF-4A40-AFAD-21291449E2BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Biblioteca.Domain", "Biblioteca.Domain\Biblioteca.Domain.csproj", "{7B655539-32DF-4A40-AFAD-21291449E2BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biblioteca.Data", "Biblioteca.Data\Biblioteca.Data.csproj", "{938E4E19-56BC-48E8-AC7F-82E0AACEBBC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Biblioteca.Data", "Biblioteca.Data\Biblioteca.Data.csproj", "{938E4E19-56BC-48E8-AC7F-82E0AACEBBC9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{00175327-FB33-4ABA-8965-867055A9BE81}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
+		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biblioteca.Repositories", "Biblioteca.Repositories\Biblioteca.Repositories.csproj", "{AC376C4A-BC4B-4CE6-9505-3EA8343110F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Biblioteca.Repositories", "Biblioteca.Repositories\Biblioteca.Repositories.csproj", "{AC376C4A-BC4B-4CE6-9505-3EA8343110F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biblioteca.API", "Biblioteca.API\Biblioteca.API.csproj", "{9735C03F-A87C-49BA-B6A3-183236B30F3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Biblioteca.API", "Biblioteca.API\Biblioteca.API.csproj", "{9735C03F-A87C-49BA-B6A3-183236B30F3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biblioteca.Repositories.Tests", "Biblioteca.Repositories.Tests\Biblioteca.Repositories.Tests.csproj", "{A5ACDB0C-1290-4A90-A673-72D46889B9F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Biblioteca.Repositories.Tests", "Biblioteca.Repositories.Tests\Biblioteca.Repositories.Tests.csproj", "{A5ACDB0C-1290-4A90-A673-72D46889B9F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
