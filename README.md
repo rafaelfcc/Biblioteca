@@ -29,3 +29,4 @@ Para isso, utilize o seguinte comando:
 
 	dotnet ef migrations script --project Biblioteca.Data --startup-project Biblioteca.API --output D:\scriptBaseDeDadosBiblioteca.sql
 	
+O arquivo "Biblioteca - Acessos a API Backend.postman_collection.json" é uma exportação do conjunto de acessos no Postman.
