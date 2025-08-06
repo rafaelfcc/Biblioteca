@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Biblioteca.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsuarioController : ControllerBase
@@ -41,6 +41,7 @@ namespace Biblioteca.API.Controllers
             return Ok(usuarios);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult Post([FromBody] Usuario novoUsuario)
         {
@@ -80,7 +81,8 @@ namespace Biblioteca.API.Controllers
             return _repository.Delete<string>(email) ? Ok("Usuário excluído com sucesso") : StatusCode(500, "Erro ao excluir");
         }
 
-        [HttpPost("request-password-reset")] // Rota completa: /api/Usuario/request-password-reset
+        [AllowAnonymous]
+        [HttpPost("request-password-reset")]
         public async Task<IActionResult> RequestPasswordReset([FromBody] PasswordResetRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Email))

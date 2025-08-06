@@ -2,6 +2,7 @@
 using Biblioteca.Data.Context;
 using Biblioteca.Data.Repositories;
 using Biblioteca.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

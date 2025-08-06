@@ -11,7 +11,7 @@ using Biblioteca.Domain.Contracts;
 
 namespace Biblioteca.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LivrosController : ControllerBase
