@@ -18,7 +18,9 @@ namespace Biblioteca.Repositories.Tests
 
         public LivroRepositoryTest()
         {
-            var options = new DbContextOptionsBuilder<DataContext>().UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()).Options;
+            var options = new DbContextOptionsBuilder<DataContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
 
             _context = new DataContext(options);
             _repository = new LivroRepository(_context);
@@ -29,20 +31,36 @@ namespace Biblioteca.Repositories.Tests
             _context.Database.EnsureDeleted();
             _context.Dispose();
         }
+
+        private (int generoId, int editoraId) SeedGeneroEditora()
+        {
+            var genero = new GeneroLivro { Id = 1, Genero = "Ficção" };
+            var editora = new Editora { Id = 1, Nome = "Companhia das Letras" };
+
+            _context.Add(genero);
+            _context.Add(editora);
+            _context.SaveChanges();
+
+            return (genero.Id, editora.Id);
+        }
         #endregion
 
         #region Métodos de Teste
         [Fact]
         public void Insert_ShouldAddLivroToDatabase()
         {
-            // Arrange
-            var novoLivro = new Livro { Titulo = "O Pequeno Príncipe" };
+            var (generoId, editoraId) = SeedGeneroEditora();
 
-            // Act
-            _repository.Insert(novoLivro);
+            var novoLivro = new Livro
+            {
+                Titulo = "O Pequeno Príncipe",
+                GeneroId = generoId,
+                EditoraId = editoraId
+            };
 
-            // Assert
-            var livroNoBanco = _context.Set<Livro>().Find(novoLivro.Id);
+            var insertedId = _repository.Insert(novoLivro);
+
+            var livroNoBanco = _context.Set<Livro>().Find(insertedId);
             Assert.NotNull(livroNoBanco);
             Assert.Equal(novoLivro.Titulo, livroNoBanco.Titulo);
         }
@@ -50,37 +68,60 @@ namespace Biblioteca.Repositories.Tests
         [Fact]
         public void Get_ShouldReturnLivroById()
         {
-            // Arrange
+            var (generoId, editoraId) = SeedGeneroEditora();
+
             var livroId = Guid.NewGuid();
-            var livroSeed = new Livro { Id = livroId, Titulo = "Senhor dos Anéis" };
+            var livroSeed = new Livro
+            {
+                Id = livroId,
+                Titulo = "Senhor dos Anéis",
+                GeneroId = generoId,
+                EditoraId = editoraId,
+                GeneroLivro = _context.GeneroLivros.Find(generoId)!,
+                Editora = _context.Editoras.Find(editoraId)!
+            };
             _context.Set<Livro>().Add(livroSeed);
             _context.SaveChanges();
 
-            // Act
             var livroRetornado = _repository.Get(livroId);
 
-            // Assert
             Assert.NotNull(livroRetornado);
             Assert.Equal(livroId, livroRetornado.Id);
             Assert.Equal("Senhor dos Anéis", livroRetornado.Titulo);
+            Assert.NotNull(livroRetornado.Editora);
+            Assert.NotNull(livroRetornado.GeneroLivro);
         }
 
         [Fact]
         public void Update_ShouldUpdateLivroData()
         {
-            // Arrange
+            var (generoId, editoraId) = SeedGeneroEditora();
+
             var livroId = Guid.NewGuid();
-            var livroSeed = new Livro { Id = livroId, Titulo = "Título Antigo" };
+            var livroSeed = new Livro
+            {
+                Id = livroId,
+                Titulo = "Título Antigo",
+                GeneroId = generoId,
+                EditoraId = editoraId,
+                GeneroLivro = _context.GeneroLivros.Find(generoId)!,
+                Editora = _context.Editoras.Find(editoraId)!
+            };
             _context.Set<Livro>().Add(livroSeed);
             _context.SaveChanges();
+
             _context.Entry(livroSeed).State = EntityState.Detached;
 
-            var livroParaAtualizar = new Livro { Id = livroId, Titulo = "Título Novo" };
+            var livroParaAtualizar = new Livro
+            {
+                Id = livroId,
+                Titulo = "Título Novo",
+                GeneroId = generoId,
+                EditoraId = editoraId
+            };
 
-            // Act
             var result = _repository.Update(livroParaAtualizar);
 
-            // Assert
             var livroNoBanco = _context.Set<Livro>().Find(livroId);
             Assert.True(result);
             Assert.Equal("Título Novo", livroNoBanco.Titulo);
@@ -89,16 +130,13 @@ namespace Biblioteca.Repositories.Tests
         [Fact]
         public void Delete_ShouldRemoveLivroFromDatabase()
         {
-            // Arrange
             var livroId = Guid.NewGuid();
             var livroSeed = new Livro { Id = livroId, Titulo = "Livro para Excluir" };
             _context.Set<Livro>().Add(livroSeed);
             _context.SaveChanges();
 
-            // Act
             var result = _repository.Delete(livroId);
 
-            // Assert
             var livroNoBanco = _context.Set<Livro>().Find(livroId);
             Assert.True(result);
             Assert.Null(livroNoBanco);
@@ -107,7 +145,6 @@ namespace Biblioteca.Repositories.Tests
         [Fact]
         public void GetList_ShouldReturnFilteredListByTitulo()
         {
-            // Arrange
             _context.Set<Livro>().AddRange(
                 new Livro { Id = Guid.NewGuid(), Titulo = "A" },
                 new Livro { Id = Guid.NewGuid(), Titulo = "B" },
@@ -115,12 +152,11 @@ namespace Biblioteca.Repositories.Tests
             );
             _context.SaveChanges();
 
-            // Act
             var listaA = _repository.GetList(l => l.Titulo == "A");
 
-            // Assert
             Assert.Equal(2, listaA.Count);
         }
         #endregion
     }
+
 }
