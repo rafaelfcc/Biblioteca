@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -10,20 +12,32 @@ services:
     volumes:
       - sql_data:/var/opt/mssql
     restart: unless-stopped
-
+  
   biblioteca-backend:
     image: biblioteca-backend
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5078:80"  # Mapeia a porta 80 do container para a 5078 local
+      - "5078:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:DefaultConnection=Server=sqlserver,1433;Database=master;User Id=SA;Password=Biblioteca@25;TrustServerCertificate=True;"
+    depends_on:
+      - sqlserver
+    command: sh -c "dotnet ef database update --project Biblioteca.Data --startup-project Biblioteca.API && dotnet Biblioteca.API.dll"
+
+  smtp4dev:
+    image: rnwood/smtp4dev
+    restart: always
+    ports:
+      - "5000:80"
+      - "2525:25"
+    container_name: smtp4dev_container
 
 volumes:
   sql_data:
-  
+
 networks:
   app-network:
     driver: bridge

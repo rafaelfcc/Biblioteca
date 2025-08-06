@@ -17,12 +17,20 @@ COPY . .
 WORKDIR /src/Biblioteca.API
 RUN dotnet publish -c Release -o /app/publish
 
+# Instalar a ferramenta 'dotnet-ef' globalmente
+RUN dotnet tool install --global dotnet-ef
+
 # Build final para runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
 # Copiar os arquivos publicados da etapa build
 COPY --from=build /app/publish .
+
+# Adicionar o diretório da ferramenta ao PATH para que o comando 'dotnet ef' funcione
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+RUN mkdir -p wwwroot/uploads
 
 # Expor porta 80
 EXPOSE 80

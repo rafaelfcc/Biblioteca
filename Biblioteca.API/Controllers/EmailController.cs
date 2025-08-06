@@ -22,7 +22,7 @@ namespace Biblioteca.API.Controllers
             var assunto = "Recuperação de Senha";
             var corpo = $"<p>Você solicitou a redefinição de senha. Clique no link abaixo:</p><p><a href=\"https://seudominio.com/resetar?token={token}\">Resetar Senha</a></p>";
 
-            await _emailService.EnviarEmailAsync(email, assunto, corpo);
+            await _emailService.SendEmailAsync(email, assunto, corpo);
             return Ok(new { mensagem = "Se o e-mail estiver registrado, você receberá um link de recuperação." });
         }
     }

@@ -1,49 +1,48 @@
 ﻿using Biblioteca.Domain.Contracts;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Biblioteca.Repositories.Services
 {
     public class EmailService : IEmailService
     {
-        private readonly IConfiguration _config;
+        private readonly IConfiguration _configuration;
 
-        public EmailService(IConfiguration config)
+        public EmailService(IConfiguration configuration)
         {
-            _config = config;
+            _configuration = configuration;
         }
 
-        public async Task EnviarEmailAsync(string destinatario, string assunto, string corpoHtml)
+        public async Task SendEmailAsync(string toEmail, string subject, string message)
         {
-            var remetente = _config["EmailSettings:Remetente"];
-            var senha = _config["EmailSettings:Senha"];
-            var smtp = _config["EmailSettings:Smtp"];
-            var porta = int.Parse(_config["EmailSettings:Porta"]);
+            var smtpHost = _configuration["EmailSettings:SmtpHost"];
+            var smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"] ?? "25");
+            var enableSsl = bool.Parse(_configuration["EmailSettings:EnableSsl"] ?? "false");
+            var userName = _configuration["EmailSettings:UserName"];
+            var password = _configuration["EmailSettings:Password"];
+            var fromEmail = _configuration["EmailSettings:FromEmail"];
+            var fromName = _configuration["EmailSettings:FromName"];
 
-            using var client = new SmtpClient(smtp, porta)
+            using (var client = new SmtpClient(smtpHost, smtpPort))
             {
-                Port = porta,
-                Credentials = new NetworkCredential(remetente, senha),
-                EnableSsl = true
-            };
+                client.EnableSsl = enableSsl;
+                client.UseDefaultCredentials = string.IsNullOrEmpty(userName);
+                if (!string.IsNullOrEmpty(userName))
+                {
+                    client.Credentials = new System.Net.NetworkCredential(userName, password);
+                }
 
-            var mail = new MailMessage
-            {
-                From = new MailAddress(remetente),
-                Subject = assunto,
-                Body = corpoHtml,
-                IsBodyHtml = true
-            };
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress(fromEmail, fromName),
+                    Subject = subject,
+                    Body = message,
+                    IsBodyHtml = true
+                };
+                mailMessage.To.Add(toEmail);
 
-            mail.To.Add(destinatario);
-
-            await client.SendMailAsync(mail);
+                await client.SendMailAsync(mailMessage);
+            }
         }
     }
 }

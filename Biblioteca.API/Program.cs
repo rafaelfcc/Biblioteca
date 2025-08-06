@@ -7,6 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Biblioteca.API.JwtAux;
+using Biblioteca.API.Mappers;
+using Biblioteca.Domain.Contracts;
+using Biblioteca.Repositories.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +17,13 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 
-// Injeção de dependência
+#region Injeção de dependência
 builder.Services.AddScoped<LivroRepository>();
 builder.Services.AddScoped<UsuarioRepository>();
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddTransient<IEmailService, Biblioteca.Repositories.Services.EmailService>();
+builder.Services.AddTransient<IRelatorioPdf, RelatorioPdf>();
+#endregion
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -35,6 +41,9 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
 //Configuração do Builder para o JWT
@@ -96,6 +105,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 /////
+///
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -104,6 +114,7 @@ builder.WebHost.ConfigureKestrel(options =>
 
 var app = builder.Build();
 app.UseCors("AllowAll");
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSwagger();

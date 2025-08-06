@@ -13,30 +13,18 @@ namespace Biblioteca.Domain.Entities
 
         public string Titulo { get; set; } = string.Empty;
         public string ISBN { get; set; } = string.Empty;
-        public string Genero { get; set; } = string.Empty;
+        public int GeneroId { get; set; } = 0;
         public string Autor { get; set; } = string.Empty;
-        public string Editora { get; set; } = string.Empty;
+        public int EditoraId { get; set; } = 0;
         public string Sinopse { get; set; } = string.Empty;
+        public string UsuarioRegistro { get; set; } = string.Empty;
 
         public string CaminhoFoto { get; set; } = string.Empty;
 
+        public GeneroLivro GeneroLivro { get; set; } = null!;
+        public Editora Editora { get; set; } = null!;
+
         [NotMapped]
         public byte FotoLivro { get; set; }
-
-        public Livro()
-        {
-                
-        }
-
-        public Livro(string titulo, string isbn, string genero, string autor, string editora, string sinopse, string caminhoFoto)
-        {
-            Titulo = titulo;
-            ISBN = isbn;
-            Genero = genero;
-            Autor = autor;
-            Editora = editora;
-            Sinopse = sinopse;
-            CaminhoFoto = caminhoFoto;
-        }
     }
 }

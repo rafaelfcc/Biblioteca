@@ -8,6 +8,6 @@ namespace Biblioteca.Domain.Contracts
 {
     public interface IEmailService
     {
-        Task EnviarEmailAsync(string destinatario, string assunto, string corpoHtml);
+        Task SendEmailAsync(string toEmail, string subject, string message);
     }
 }
