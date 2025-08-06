@@ -29,3 +29,4 @@ Para isso, utilize o seguinte comando:
 
 	dotnet ef migrations script --project Biblioteca.Data --startup-project Biblioteca.API --output D:\scriptBaseDeDadosBiblioteca.sql
 	
+ATENÇÃO! Utilize a Branch DEV e não a MASTER.
